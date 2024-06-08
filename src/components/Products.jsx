@@ -1,43 +1,36 @@
-import { useEffect, useState } from 'react'
-import {add} from '../store/cartSlice';
-import { useDispatch } from 'react-redux';
-
-
+import { useEffect } from 'react';
+import { add } from '../store/cartSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchProducts } from '../store/productSlice';
 
 const Products = () => {
-  const dispatch=useDispatch();
-     const[products,setProducts]=useState([]);
+  const dispatch = useDispatch();
+  const { data: products = [], status = 'idle' } = useSelector((state) => state.product);
 
-     useEffect(()=>{
-       const fetchProducts = async () => {
-            const res = await fetch('https://fakestoreapi.com/products');
-            const data = await res.json();
-            console.log(data);
-          setProducts(data);
-        };
-        fetchProducts();
-    
-     },[]);
+  useEffect(() => {
+    // Dispatching fetchProducts action to load products
+    dispatch(fetchProducts());
+  }, [dispatch]);
 
-   const handleAdd=(product)=>{
-      dispatch(add(product));
-   }  
+  const handleAdd = (product) => {
+    dispatch(add(product));
+  };
 
   return (
     <div className='productsWrapper'>
-    {
-      products.map((product)=>(
-        <div className='card' key={product.id}>
-             <img src={product.image} alt=''/>
-             <h4>{product.title}</h4>
-             <h5>{product.price}</h5>
-             <button  onClick={()=>handleAdd(product)} className='btn'>Add to Cart</button>
-        </div>
-      )
-      )
-    }
-      </div>
-  )
-}
+      {status === 'loading' && <p>Loading...</p>}
+      {status === 'failed' && <p>Error loading products</p>}
+      {status === 'succeeded' &&
+        products.map((product) => (
+          <div className='card' key={product.id}>
+            <img src={product.image} alt={product.title} />
+            <h4>{product.title}</h4>
+            <h5>{product.price}</h5>
+            <button onClick={() => handleAdd(product)} className='btn'>Add to Cart</button>
+          </div>
+        ))}
+    </div>
+  );
+};
 
-export default Products
+export default Products;
