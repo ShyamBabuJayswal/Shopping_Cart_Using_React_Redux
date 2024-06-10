@@ -314,10 +314,5 @@ function App() {
 export default App;
 ```
 
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## 📧 Contact
-
-For any inquiries, please contact [Shyam Babu Jayswal](https://github.com/ShyamBabuJayswal).
+For any inquiries, please contact [Shyam Babu Jayswal](shyambabu_jayswal@yahoo.com).
